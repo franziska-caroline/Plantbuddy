@@ -1,10 +1,10 @@
 import React from "react";
-import PlantCard from "@/components/Card";
+import PlantCard from "../components/Card";
 import styled from "styled-components";
-import Headline from "@/components/Headline";
-import Login from "@/components/Login";
+import Headline from "../components/Headline";
+import Login from "../components/Login";
 import { useSession } from "next-auth/react";
-import { StyledTitle } from "@/components/Title/StyledTitle";
+import { StyledTitle } from "../components/Title/StyledTitle";
 import Header from "next/head";
 
 

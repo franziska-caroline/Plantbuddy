@@ -2,11 +2,11 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import Image from "next/image";
 import styled from "styled-components";
-import PlantCharacteristics from "@/components/PlantCharacteristics";
-import FavoriteButton from "@/components/FavoriteButton";
+import PlantCharacteristics from "../../components/PlantCharacteristics";
+import FavoriteButton from "../../components/FavoriteButton";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import BackButton from "@/components/BackButton";
+import BackButton from "../../components/BackButton";
 import Head from "next/head";
 
 export default function PlantDetail({

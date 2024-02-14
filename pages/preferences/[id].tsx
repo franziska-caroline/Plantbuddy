@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
-import PlantCard from "@/components/Card";
-import Headline from "@/components/Headline";
+import PlantCard from "../../components/Card";
+import Headline from "../../components/Headline";
 import styled from "styled-components";
 import { useSession } from "next-auth/react";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import Login from "@/components/Login";
-import BackButton from "@/components/BackButton";
-import { StyledTitle } from "@/components/Title/StyledTitle";
+import ProtectedRoute from "../../components/ProtectedRoute";
+import Login from "../../components/Login";
+import BackButton from "../../components/BackButton";
+import { StyledTitle } from "../../components/Title/StyledTitle";
 import Head from "next/head";
 
 export default function Preference({

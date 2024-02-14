@@ -3,7 +3,16 @@ import Image from "next/image";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
-export default function Navigation({ theme }) {
+export interface NavigationProps {
+  theme: string
+}
+
+interface ImageSrcProps {
+  name: string;
+  pathname: string;
+}
+
+export default function Navigation({ theme }: NavigationProps) {
   const router = useRouter();
 
   const handleHomeClick = () => {
@@ -14,7 +23,7 @@ export default function Navigation({ theme }) {
     }
   };
 
-  const imageSrc = (name, pathname) => {
+  const imageSrc = ({name, pathname}: ImageSrcProps) => {
     if (theme === "light") {
       return router.pathname === pathname
         ? `/assets/${name}Active.svg`
@@ -26,6 +35,7 @@ export default function Navigation({ theme }) {
         ? `/assets/${name}Darkmode.svg`
         : `/assets/${name}Active.svg`;
     }
+    return `/assets/${name}Inactive.svg`;
   };
 
   return (
@@ -34,7 +44,7 @@ export default function Navigation({ theme }) {
         <li>
           <Link href="/" onClick={handleHomeClick}>
             <Image
-              src={imageSrc("Home", "/")}
+              src={imageSrc({ name: "Home", pathname: "/" })}
               alt="Home Icon"
               width={40}
               height={40}
@@ -44,7 +54,7 @@ export default function Navigation({ theme }) {
         <li>
           <Link href="/favorites">
             <Image
-              src={imageSrc("Heart", "/favorites")}
+              src={imageSrc({name: "Heart", pathname:"/favorites"})}
               alt="Favorite Icon"
               width={40}
               height={40}
@@ -54,7 +64,7 @@ export default function Navigation({ theme }) {
         <li>
           <Link href="/categories">
             <Image
-              src={imageSrc("Category", "/categories")}
+              src={imageSrc({name:"Category", pathname:"/categories"})}
               alt="Categories Icon"
               width={40}
               height={40}
@@ -64,7 +74,7 @@ export default function Navigation({ theme }) {
         <li>
           <Link href="/preferences">
             <Image
-              src={imageSrc("Preference", "/preferences")}
+              src={imageSrc({name: "Preference", pathname:"/preferences"})}
               alt="Preference Icon"
               width={40}
               height={40}
@@ -74,7 +84,7 @@ export default function Navigation({ theme }) {
         <li>
           <Link href="/journal">
             <Image
-              src={imageSrc("Journal", "/journal")}
+              src={imageSrc({name:"Journal", pathname:"/journal"})}
               alt="Journal Icon"
               width={40}
               height={40}

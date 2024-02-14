@@ -1,8 +1,8 @@
-import Headline from "@/components/Headline";
+import Headline from "../components/Headline";
 import Image from "next/image";
 import styled from "styled-components";
 import Link from "next/link";
-import { StyledTitle } from "@/components/Title/StyledTitle";
+import { StyledTitle } from "../components/Title/StyledTitle";
 import Head from "next/head";
 
 export default function AboutPage() {

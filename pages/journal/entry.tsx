@@ -1,13 +1,12 @@
 import React from "react";
 import { useState } from "react";
-import Headline from "@/components/Headline";
-import { StyledTitle } from "@/components/Title/StyledTitle";
-import BackButton from "@/components/BackButton";
+import Headline from "../../components/Headline";
+import { StyledTitle } from "../../components/Title/StyledTitle";
+import BackButton from "../../components/BackButton";
 import styled from "styled-components";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import Image from "next/image";
 
 export default function EntryForm({ onFormSubmit }) {
   const { status } = useSession();

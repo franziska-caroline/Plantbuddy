@@ -2,7 +2,7 @@ import useSWR from "swr";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import BackButton from "@/components/BackButton";
+import BackButton from "../../components/BackButton";
 import Head from "next/head";
 
 export default function CategoryDetail({ theme }) {

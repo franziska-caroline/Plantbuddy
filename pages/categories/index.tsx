@@ -2,8 +2,8 @@ import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import useSWR from "swr";
-import Headline from "@/components/Headline";
-import { StyledTitle } from "@/components/Title/StyledTitle";
+import Headline from "../../components/Headline";
+import { StyledTitle } from "../../components/Title/StyledTitle";
 import Head from "next/head";
 
 export default function CategoriesOverview({ theme }) {

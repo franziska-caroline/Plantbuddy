@@ -1,9 +1,9 @@
-import Headline from "@/components/Headline";
-import PreferenceList from "@/components/PreferenceList";
-import FilterForm from "@/components/FilterForm";
-import Login from "@/components/Login";
+import Headline from "../../components/Headline";
+import PreferenceList from "../../components/PreferenceList";
+import FilterForm from "../../components/FilterForm";
+import Login from "../../components/Login";
 import { useSession } from "next-auth/react";
-import { StyledTitle } from "@/components/Title/StyledTitle";
+import { StyledTitle } from "../../components/Title/StyledTitle";
 import Head from "next/head";
 
 export default function PreferencesPage({

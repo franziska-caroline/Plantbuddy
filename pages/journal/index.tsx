@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import Headline from "@/components/Headline";
+import Headline from "../../components/Headline";
 import styled from "styled-components";
-import { StyledTitle } from "@/components/Title/StyledTitle";
-import EntryCard from "@/components/JournalEntryCard";
+import { StyledTitle } from "../../components/Title/StyledTitle";
+import EntryCard from "../../components/JournalEntryCard";
 import { useSession } from "next-auth/react";
-import Login from "@/components/Login";
+import Login from "../../components/Login";
 import Head from "next/head";
 
 export default function JournalOverviewPage({ entries, handleDeleteEntry, }) {

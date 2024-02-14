@@ -1,16 +1,23 @@
-import Layout from "@/components/Layout";
+import Layout from "../components/Layout";
 import GlobalStyle from "../styles";
 import useLocalStorageState from "use-local-storage-state";
 import { uid } from "uid";
 import { ThemeProvider } from "styled-components";
-import { lightTheme, darkTheme } from "@/components/Theme";
+import { lightTheme, darkTheme } from "../components/Theme";
 import { SWRConfig } from "swr";
-import fetcher from "@/utils/fetcher";
+import fetcher from "../utils/fetcher";
 import useSWR from "swr";
 import { SessionProvider } from "next-auth/react";
+import { newPreference } from "../types/newPreference";
+import { Preference } from "../types/preference";
 
-export default function App({ Component, pageProps }) {
-  const [theme, setTheme] = useLocalStorageState("theme", {
+interface AppProps {
+  Component: React.ComponentType<any>;
+  pageProps: any;
+}
+
+export default function App({ Component, pageProps }: AppProps): JSX.Element {
+  const [theme, setTheme] = useLocalStorageState<string>("theme", {
     defaultValue: "light",
   });
 
@@ -18,66 +25,61 @@ export default function App({ Component, pageProps }) {
     theme === "light" ? setTheme("dark") : setTheme("light");
   }
 
-  const [favorites, setFavorites] = useLocalStorageState("favorites", {
+  const [favorites, setFavorites] = useLocalStorageState<string[]>("favorites", {
     defaultValue: [],
   });
 
-  const [preferences, setPreferences] = useLocalStorageState("preferences", {
+  const [preferences, setPreferences] = useLocalStorageState<{ id: string }[]>("preferences", {defaultValue: []});
+
+
+  const [entries, setEntries] = useLocalStorageState<{id: string}[]>("entries", {
     defaultValue: [],
   });
 
-  const [entries, setEntries] = useLocalStorageState("entries", {
-    defaultValue: [],
-  });
-
-  function handleToggleFavorite(plantId) {
-    if (favorites.includes(plantId)) {
-      setFavorites(favorites?.filter((favorite) => favorite !== plantId));
-    } else {
-      setFavorites([...favorites, plantId]);
-    }
+  function handleToggleFavorite(plantId: string) {
+    setFavorites((prevFavorites) =>
+    prevFavorites.includes(plantId)
+      ? prevFavorites.filter((favorite) => favorite !== plantId)
+      : [...prevFavorites, plantId]
+  );
   }
 
-  function handleAddPreference(newPreference) {
-    setPreferences([...preferences, { id: uid(), ...newPreference }]);
+  function handleAddPreference(newPreference: newPreference) {
+    setPreferences((prevPreferences) => [...prevPreferences, { id: uid(), ...newPreference }]);
   }
+  
 
-  function handleEditPreference(editedPreference) {
-    setPreferences(
-      preferences.map((preference) =>
+  function handleEditPreference(editedPreference: Preference) {
+    setPreferences((prevPreferences) =>
+      prevPreferences.map((preference) =>
         preference.id === editedPreference.id ? editedPreference : preference
       )
     );
   }
 
-  function handleDeletePreference(id) {
-    setPreferences(preferences.filter((preference) => preference.id !== id));
+  function handleDeletePreference(id: string) {
+    setPreferences((prevPreferences) => prevPreferences.filter((preference) => preference.id !== id));
   }
 
-  function handleDeleteEntry(id) {
-    setEntries(entries.filter((entry) => entry.id !== id));
+  function handleDeleteEntry(id: string) {
+    setEntries((prevEntries) => prevEntries.filter((entry) => entry.id !== id));
   }
 
-    const { data: plants, error: plantsError } = useSWR("/api/plants", fetcher);
-    const { data: categories, error: categoriesError } = useSWR(
-      "/api/categories",
-      fetcher
-    );
+  const { data: plants, error: plantsError } = useSWR("/api/plants", fetcher);
+  const { data: categories, error: categoriesError } = useSWR("/api/categories", fetcher);
 
     if (plantsError || categoriesError)
       return <div>Error occurred while fetching data</div>;
     if (!plants || !categories) return <div>Loading...</div>;
 
-    function handleFormSubmit(data) {
+    function handleFormSubmit(data: any ) {
       const newEntry = { id: uid(), ...data };
       setEntries((prevFormEntry) => [...prevFormEntry, newEntry]);
     }
     
-    function handleEditEntry(editedEntry) {
-      setEntries(
-        entries.map((entry) =>
-          entry.id === editedEntry.id ? editedEntry : entry
-        )
+    function handleEditEntry(editedEntry: { id: string }) {
+      setEntries((prevEntries) =>
+        prevEntries.map((entry) => (entry.id === editedEntry.id ? editedEntry : entry))
       );
     }
 

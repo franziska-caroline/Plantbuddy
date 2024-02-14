@@ -1,13 +1,14 @@
-import PlantList from "@/components/PlantList";
+import Plant from "../db/models/plants";
 import React, { useState } from "react";
-import SearchField from "@/components/SearchField";
-import Headline from "@/components/Headline";
+import SearchField from "../components/SearchField";
+import Headline from "../components/Headline";
 import styled from "styled-components";
-import SortPlants from "@/components/SortPlants";
+import SortPlants from "../components/SortPlants";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import Header from "next/head";
 import Link from "next/link";
+import PlantList from "../components/PlantList";
 
 export default function HomePage({
   onToggleFavorite,

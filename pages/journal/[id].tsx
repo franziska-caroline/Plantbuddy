@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import BackButton from "@/components/BackButton";
+import ProtectedRoute from "../../components/ProtectedRoute";
+import BackButton from "../../components/BackButton";
 import Head from "next/head";
 
 export default function EntryDetail({ entries }) {

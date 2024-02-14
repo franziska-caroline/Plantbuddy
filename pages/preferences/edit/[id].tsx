@@ -1,12 +1,12 @@
-import FilterForm from "@/components/FilterForm";
+import FilterForm from "../../../components/FilterForm";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import Login from "@/components/Login";
-import Headline from "@/components/Headline";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import BackButton from "@/components/BackButton";
-import { StyledTitle } from "@/components/Title/StyledTitle";
+import Login from "../../../components/Login";
+import Headline from "../../../components/Headline";
+import ProtectedRoute from "../../../components/ProtectedRoute";
+import BackButton from "../../../components/BackButton";
+import { StyledTitle } from "../../../components/Title/StyledTitle";
 import Head from "next/head";
 
 export default function EditPreferencePage({

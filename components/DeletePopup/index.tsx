@@ -1,6 +1,13 @@
+import { MouseEventHandler } from "react";
 import styled from "styled-components";
 
-export default function DeletePopup({ onConfirm, onCancel, name }) {
+export interface DeletePopupProps {
+onConfirm: MouseEventHandler<HTMLButtonElement>;
+onCancel: MouseEventHandler<HTMLButtonElement>;
+name: string;
+}
+
+export default function DeletePopup({ onConfirm, onCancel, name }: DeletePopupProps) {
   return (
     <StyledPopupContainer>
       <StyledPopupContent>

@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-export default function SortPlants({ onSortUpdate, plants }) {
+export interface SortPlantsProps {
+  onSortUpdate: any;
+  plants: any[];
+}
+
+export default function SortPlants({ onSortUpdate, plants }: SortPlantsProps) {
   const [selectedOption, setSelectedOption] = useState("A to Z");
 
   const handleSortingChange = (option) => {

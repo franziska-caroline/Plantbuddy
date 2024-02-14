@@ -1,15 +1,23 @@
-import Navigation from "../Navigation";
 import styled from "styled-components";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
+import Navigation from "../Navigation";
+import { Session } from "../../types/session";
 
-export default function Layout({ children, theme }) {
-  const { status } = useSession();
-  const router = useRouter();
+export interface LayoutProps {
+  children: React.ReactNode;
+  theme: string;
+}
+
+export default function Layout({ children, theme }: LayoutProps) {
+  const { data: session } = useSession() as { data: Session };
+  const router: NextRouter = useRouter();
+
+  console.log(session);
 
   return (
     <>
-      <StyledMain router={router} status={status}>
+      <StyledMain pathname={router.pathname} status={session?.status}>
         {children}
       </StyledMain>
       <Navigation theme={theme} />
@@ -17,18 +25,23 @@ export default function Layout({ children, theme }) {
   );
 }
 
-const StyledMain = styled.main`
-  padding-top: ${({ router, status }) =>
-    router.pathname === "/plants/[_id]" ||
-    router.pathname === "/categories/[slug]" ||
-    router.pathname === "/journal/[id]"
+interface StyledMainProps {
+  pathname: string;
+  status?: string;
+}
+
+const StyledMain = styled.main<StyledMainProps>`
+  padding-top: ${({ pathname, status }) =>
+    pathname === "/plants/[_id]" ||
+    pathname === "/categories/[slug]" ||
+    pathname === "/journal/[id]"
       ? "0"
       : status === "authenticated"
       ? "9rem"
       : "6rem"};
-  padding-bottom: ${({ router }) =>
-    router.pathname === "/plants/[_id]" ||
-    router.pathname === "/categories/[slug]"
+  padding-bottom: ${({ pathname }) =>
+    pathname === "/plants/[_id]" ||
+    pathname === "/categories/[slug]"
       ? "0"
       : "6rem"};
 `;

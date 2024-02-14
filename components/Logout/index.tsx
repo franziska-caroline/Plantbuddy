@@ -1,8 +1,15 @@
 import { useSession, signOut } from "next-auth/react";
 import styled from "styled-components";
+import { Session } from "../../types/session";
 
+interface CustomSession extends Session {
+  user: {
+    name: string,
+  }
+}
 export default function Logout() {
-  const { data: session } = useSession();
+  const { data: session } = useSession() as {data: CustomSession};
+
 
   const fullName = session.user.name;
   const firstName = fullName.split(" ")[0];
@@ -15,6 +22,7 @@ export default function Logout() {
         </StyledSection>
     );
   }
+  return null
 }
 
 const StyledSection = styled.section`

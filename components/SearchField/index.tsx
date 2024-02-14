@@ -1,13 +1,17 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 import Image from "next/image";
 
-export default function SearchField({ onChange }) {
-  const [icon, setIcon] = useState("search");
+export interface SearchFieldProps {
+  onChange: ChangeEventHandler<HTMLInputElement>;
+}
 
-  function handleOnChange(event) {
+export default function SearchField({ onChange }: SearchFieldProps) {
+  const [icon, setIcon] = useState<"search" | "clear-search">("search");
+
+  function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const searchValue = event.target.value;
-    onChange(searchValue);
+    onChange(event);
     if (searchValue.length > 0) {
       setIcon("clear-search");
     } else {
@@ -17,11 +21,14 @@ export default function SearchField({ onChange }) {
 
   function clearInput() {
     if (icon === "clear-search") {
-      onChange("");
+      onChange({ target: { value: "" } } as React.ChangeEvent<HTMLInputElement>);
       setIcon("search");
-      document.getElementById("search").value = "";
-    }
+      const searchInput = document.getElementById("search") as HTMLInputElement;
+      if (searchInput) {
+        searchInput.value = ""; 
+      }
   }
+}
 
   return (
     <InputWrapper>
@@ -48,7 +55,7 @@ export default function SearchField({ onChange }) {
   );
 }
 
-const StyledImage = styled(Image)`
+const StyledImage = styled(Image)<{ $icon: "search" | "clear-search" }>`
   cursor: ${({ $icon }) => ($icon === "clear-search" ? "pointer" : "")};
   position: absolute;
   right: 28px;
@@ -94,5 +101,4 @@ const SearchFieldInput = styled.input`
   &::-webkit-search-results-decoration {
     display: none;
   }
-  
 `;

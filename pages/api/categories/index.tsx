@@ -1,5 +1,5 @@
-import dbConnect from "@/db/connect";
-import Category from "@/db/models/categories";
+import dbConnect from "../../../db/connect";
+import Category from "../../../db/models/categories";
 
 export default async function handler(request, response) {
   await dbConnect();
