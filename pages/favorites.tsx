@@ -6,14 +6,21 @@ import Login from "../components/Login";
 import { useSession } from "next-auth/react";
 import { StyledTitle } from "../components/Title/StyledTitle";
 import Header from "next/head";
+import { Plant } from "../types/plant";
 
+interface FavoritePageProps {
+  plants: Plant[];
+  favorites: string[];
+  onToggleFavorite: (plantId: string) => void;
+  theme: string;
+}
 
 export default function FavoritePage({
   plants,
   favorites,
   onToggleFavorite,
   theme,
-}) {
+}: FavoritePageProps) {
   const favoritePlants = plants.filter((plant) =>
     favorites.includes(plant._id)
   );

@@ -1,7 +1,8 @@
-import dbConnect from "@/db/connect";
-import Plant from "@/db/models/plants";
+import dbConnect from "../../../db/connect";
+import Plant from "../../../db/models/plants";
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(request, response) {
+export default async function handler(request: NextApiRequest, response: NextApiResponse) {
   await dbConnect();
 
   const { _id } = request.query;

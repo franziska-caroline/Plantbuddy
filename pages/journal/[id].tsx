@@ -5,8 +5,13 @@ import Link from "next/link";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import BackButton from "../../components/BackButton";
 import Head from "next/head";
+import { Entry } from "../../types/entry";
 
-export default function EntryDetail({ entries }) {
+interface EntryDetailProps {
+  entries: Entry[];
+}
+
+export default function EntryDetail({ entries }: EntryDetailProps) {
   const router = useRouter();
   const { id } = router.query;
 

@@ -1,22 +1,28 @@
 import FilterForm from "../../../components/FilterForm";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 import Login from "../../../components/Login";
 import Headline from "../../../components/Headline";
 import ProtectedRoute from "../../../components/ProtectedRoute";
 import BackButton from "../../../components/BackButton";
 import { StyledTitle } from "../../../components/Title/StyledTitle";
 import Head from "next/head";
+import { Preference } from "../../../types/preference";
+import { Plant } from "../../../types/plant";
+
+interface EditPreferencePageProps {
+  preferences: Preference[];
+  onEditPreference: (editedPreference: Preference) => void;
+  plants: Plant[];
+}
 
 export default function EditPreferencePage({
   preferences,
   onEditPreference,
   plants,
-}) {
+}: EditPreferencePageProps) {
   const router = useRouter();
   const { id } = router.query;
-  const { status } = useSession();
 
   const thisPreference = preferences?.find(
     (preference) => preference.id === id

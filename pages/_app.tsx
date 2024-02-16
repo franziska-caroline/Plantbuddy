@@ -8,8 +8,11 @@ import { SWRConfig } from "swr";
 import fetcher from "../utils/fetcher";
 import useSWR from "swr";
 import { SessionProvider } from "next-auth/react";
-import { newPreference } from "../types/newPreference";
+import React from "react";
+import { NewPreference } from "../types/newPreference";
 import { Preference } from "../types/preference";
+import { NewEntry } from "../types/newEntry";
+import { Entry } from "../types/entry";
 
 interface AppProps {
   Component: React.ComponentType<any>;
@@ -21,96 +24,107 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     defaultValue: "light",
   });
 
-  function toggleTheme() {
+  function toggleTheme():void {
     theme === "light" ? setTheme("dark") : setTheme("light");
   }
 
-  const [favorites, setFavorites] = useLocalStorageState<string[]>("favorites", {
-    defaultValue: [],
-  });
+  const [favorites, setFavorites] = useLocalStorageState<string[]>(
+    "favorites",
+    {
+      defaultValue: [],
+    }
+  );
 
-  const [preferences, setPreferences] = useLocalStorageState<{ id: string }[]>("preferences", {defaultValue: []});
+  const [preferences, setPreferences] = useLocalStorageState<Preference[]>(
+    "preferences",
+    {
+      defaultValue: [],
+    }
+  );
 
-
-  const [entries, setEntries] = useLocalStorageState<{id: string}[]>("entries", {
+  const [entries, setEntries] = useLocalStorageState<Entry[]>("entries", {
     defaultValue: [],
   });
 
   function handleToggleFavorite(plantId: string) {
-    setFavorites((prevFavorites) =>
-    prevFavorites.includes(plantId)
-      ? prevFavorites.filter((favorite) => favorite !== plantId)
-      : [...prevFavorites, plantId]
-  );
+    if (favorites.includes(plantId)) {
+      setFavorites(favorites?.filter((favorite) => favorite !== plantId));
+    } else {
+      setFavorites([...favorites, plantId]);
+    }
   }
 
-  function handleAddPreference(newPreference: newPreference) {
-    setPreferences((prevPreferences) => [...prevPreferences, { id: uid(), ...newPreference }]);
+  function handleAddPreference(newPreference: NewPreference) {
+    setPreferences([...preferences, { id: uid(), ...newPreference }]);
   }
-  
 
   function handleEditPreference(editedPreference: Preference) {
-    setPreferences((prevPreferences) =>
-      prevPreferences.map((preference) =>
+    setPreferences(
+      preferences.map((preference) =>
         preference.id === editedPreference.id ? editedPreference : preference
       )
     );
   }
 
   function handleDeletePreference(id: string) {
-    setPreferences((prevPreferences) => prevPreferences.filter((preference) => preference.id !== id));
-  }
-
-  function handleDeleteEntry(id: string) {
-    setEntries((prevEntries) => prevEntries.filter((entry) => entry.id !== id));
+    setPreferences(preferences.filter((preference) => preference.id !== id));
   }
 
   const { data: plants, error: plantsError } = useSWR("/api/plants", fetcher);
-  const { data: categories, error: categoriesError } = useSWR("/api/categories", fetcher);
+  const { data: categories, error: categoriesError } = useSWR(
+    "/api/categories",
+    fetcher
+  );
 
-    if (plantsError || categoriesError)
-      return <div>Error occurred while fetching data</div>;
-    if (!plants || !categories) return <div>Loading...</div>;
+  if (plantsError || categoriesError)
+    return <div>Error occurred while fetching data</div>;
+  if (!plants || !categories) return <div>Loading...</div>;
 
-    function handleFormSubmit(data: any ) {
-      const newEntry = { id: uid(), ...data };
-      setEntries((prevFormEntry) => [...prevFormEntry, newEntry]);
-    }
-    
-    function handleEditEntry(editedEntry: { id: string }) {
-      setEntries((prevEntries) =>
-        prevEntries.map((entry) => (entry.id === editedEntry.id ? editedEntry : entry))
-      );
-    }
+  function handleFormSubmit(data: NewEntry) {
+    const newEntry = { id: uid(), ...data };
+    setEntries((prevFormEntry) => [...prevFormEntry, newEntry]);
+  }
 
-    return (
-      <>
-        <SessionProvider session={pageProps.session}>
-          <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
-            <SWRConfig value={{ fetcher }}>
-              <Layout theme={theme}>
-                <GlobalStyle />
-                <Component
-                  {...pageProps}
-                  onToggleFavorite={handleToggleFavorite}
-                  favorites={favorites}
-                  plants={plants}
-                  categories={categories}
-                  preferences={preferences}
-                  handleAddPreference={handleAddPreference}
-                  handleDeletePreference={handleDeletePreference}
-                  onEditPreference={handleEditPreference}
-                  theme={theme}
-                  toggleTheme={toggleTheme}
-                  onFormSubmit={handleFormSubmit}
-                  entries={entries}
-                  handleDeleteEntry={handleDeleteEntry}
-                  onEditEntry={handleEditEntry}
-                />
-              </Layout>
-            </SWRConfig>
-          </ThemeProvider>
-        </SessionProvider>
-      </>
+  function handleEditEntry(editedEntry: Entry) {
+    setEntries(
+      entries.map((entry) =>
+        entry.id === editedEntry.id ? editedEntry : entry
+      )
     );
   }
+
+  function handleDeleteEntry(id: string) {
+    setEntries(entries.filter((entry) => entry.id !== id));
+  }
+
+  return (
+    <>
+      <SessionProvider session={pageProps.session}>
+        <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+          <SWRConfig value={{ fetcher }}>
+            <Layout theme={theme}>
+              <GlobalStyle />
+              <Component
+                {...pageProps}
+                onToggleFavorite={handleToggleFavorite}
+                favorites={favorites}
+                plants={plants}
+                categories={categories}
+                preferences={preferences}
+                handleAddPreference={handleAddPreference}
+                handleDeletePreference={handleDeletePreference}
+                onEditPreference={handleEditPreference}
+                theme={theme}
+                toggleTheme={toggleTheme}
+                onFormSubmit={handleFormSubmit}
+                entries={entries}
+                handleDeleteEntry={handleDeleteEntry}
+                onEditEntry={handleEditEntry}
+              />
+            </Layout>
+          </SWRConfig>
+        </ThemeProvider>
+      </SessionProvider>
+    </>
+  );
+}

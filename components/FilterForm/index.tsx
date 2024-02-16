@@ -1,15 +1,29 @@
 import styled from "styled-components";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import { Plant } from "../../types/plant";
+import { Preference } from "../../types/preference";
+import { NewPreference } from "../../types/newPreference";
+
+interface FilterFormProps {
+  plants: Plant[];
+  onAddPreference?: (newPreference: NewPreference) => void;
+  preferenceFilterSettings?: Preference;
+  preferenceFilterTitle?: string;
+  onEditPreference?: (editedPreference: Preference) => void;
+  preferenceId?: string;
+}
 
 export default function FilterForm({
   plants,
   onAddPreference,
-  preferenceFilterSettings = {},
+  preferenceFilterSettings = {
+    id: "",
+  },
   preferenceFilterTitle = "",
   onEditPreference,
   preferenceId,
-}) {
+}: FilterFormProps) {
   const router = useRouter();
 
   const initialPreferenceFilterSettings = {
@@ -18,7 +32,7 @@ export default function FilterForm({
     sunlightRequirement: preferenceFilterSettings.sunlightRequirement || "",
     waterNeeds: preferenceFilterSettings.waterNeeds || "",
     optimalTemperature: preferenceFilterSettings.optimalTemperature || "",
-    petFriendly: preferenceFilterSettings.petFriendly || "",
+    petFriendly: preferenceFilterSettings.petFriendly || false,
   };
 
   const [settings, setSettings] = useState(initialPreferenceFilterSettings);
@@ -28,44 +42,29 @@ export default function FilterForm({
   }
 
   // Separate filter functions
-  const filterPlantSize = (plantId, size) =>
+  const filterPlantSize = (plantId: string, size: string) =>
     !size || plants.find((plant) => plant._id === plantId)?.size === size;
-  const filterSunlightRequirement = (plantId, requirement) =>
+  const filterSunlightRequirement = (plantId: string, requirement: string) =>
     !requirement ||
     plants.find((plant) => plant._id === plantId)?.sunlightRequirements ===
       requirement;
-  const filterWaterNeeds = (plantId, needs) =>
+  const filterWaterNeeds = (plantId: string, needs: string) =>
     !needs ||
     plants.find((plant) => plant._id === plantId)?.waterNeeds === needs;
-  const filterOptimalTemperature = (plantId, temperature) =>
+  const filterOptimalTemperature = (plantId: string, temperature: string) =>
     !temperature ||
     plants.find((plant) => plant._id === plantId)?.optimalTemperature ===
       temperature;
-  const filterPetFriendly = (plantId, isPetFriendly) =>
+  const filterPetFriendly = (plantId: string, isPetFriendly: boolean) =>
     !isPetFriendly ||
     plants.find((plant) => plant._id === plantId)?.petFriendly ===
-      (isPetFriendly === "true");
+      (isPetFriendly === true);
 
-  function handleSubmit(event) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const {
-      plantSize,
-      sunlightRequirement,
-      waterNeeds,
-      optimalTemperature,
-      petFriendly,
-    } = settings;
-
-    const filterSettings = {
-      plantSize,
-      sunlightRequirement,
-      waterNeeds,
-      optimalTemperature,
-      petFriendly,
-    };
-
     const preferenceData = {
+      id: preferenceId || undefined,
       preferenceTitle: settings.preferenceTitle,
       preferencePlants: plants
         .filter(
@@ -79,19 +78,26 @@ export default function FilterForm({
             filterOptimalTemperature(plant._id, settings.optimalTemperature) &&
             filterPetFriendly(plant._id, settings.petFriendly)
         )
-        .map((plant) => plant._id),
-      filterSettings,
+        .map((plant) => plant),
+      filterSettings: {
+        id: "",
+        plantSize: settings.plantSize,
+        sunlightRequirement: settings.sunlightRequirement,
+        waterNeeds: settings.waterNeeds,
+        optimalTemperature: settings.optimalTemperature,
+        petFriendly: settings.petFriendly,
+      },
     };
 
-    if (preferenceId) {
+    if (preferenceId && onEditPreference) {
       onEditPreference({ ...preferenceData, id: preferenceId });
       router.push("/preferences");
-    } else {
+    } else if (onAddPreference) {
       onAddPreference(preferenceData);
-      event.target.reset();
+      event.currentTarget.reset();
     }
-
-    event.target.elements.title.focus();
+    // TODO
+    //event.target.title.focus();
   }
 
   function handleCancel() {
@@ -112,8 +118,8 @@ export default function FilterForm({
         id="title"
         name="title"
         placeholder="Add here your Preference Title"
-        minLength="3"
-        maxLength="25"
+        minLength={3}
+        maxLength={25}
         required
         value={settings.preferenceTitle}
         onChange={(event) =>
@@ -192,9 +198,12 @@ export default function FilterForm({
         name="petFriendly"
         id="petFriendly"
         onChange={(event) =>
-          setSettings({ ...settings, petFriendly: event.target.value })
+          setSettings({
+            ...settings,
+            petFriendly: str2bool(event.target.value),
+          })
         }
-        defaultValue={settings.petFriendly}
+        defaultValue={String(settings.petFriendly)}
       >
         <option value="">Select Pet Compatibility</option>
         <option value="true">Yes</option>
@@ -274,3 +283,11 @@ const StyledButton = styled.button`
   cursor: pointer;
   width: 9rem;
 `;
+
+function str2bool(value: string): boolean {
+  if (value && typeof value === "string") {
+    if (value.toLowerCase() === "true") return true;
+    if (value.toLowerCase() === "false") return false;
+  }
+  return false;
+}

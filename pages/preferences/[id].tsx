@@ -2,12 +2,21 @@ import { useRouter } from "next/router";
 import PlantCard from "../../components/Card";
 import Headline from "../../components/Headline";
 import styled from "styled-components";
-import { useSession } from "next-auth/react";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import Login from "../../components/Login";
 import BackButton from "../../components/BackButton";
 import { StyledTitle } from "../../components/Title/StyledTitle";
 import Head from "next/head";
+import { Preference } from "../../types/preference";
+import { Plant } from "../../types/plant";
+
+interface PreferenceProps {
+  preferences: Preference[];
+  onToggleFavorite: (plantId: string) => void;
+  favorites: string[];
+  plants: Plant[];
+  theme: string;
+}
 
 export default function Preference({
   preferences,
@@ -15,27 +24,30 @@ export default function Preference({
   favorites,
   plants,
   theme,
-}) {
+}: PreferenceProps) {
   const router = useRouter();
   const { id } = router.query;
-  const { status } = useSession();
 
   const preference = preferences.find((preference) => preference.id === id);
 
   const preferencePlants = plants.filter((plant) =>
-    preference?.preferencePlants.includes(plant._id)
+    preference?.preferencePlants?.includes(plant)
   );
 
   let counterMessage;
 
   if (
-    preference?.preferencePlants.length > 0 &&
-    preference?.preferencePlants.length < plants.length
+    preference &&
+    preference.preferencePlants &&
+    preference.preferencePlants.length > 0 &&
+    plants &&
+    preference.preferencePlants.length < plants.length
   ) {
-    counterMessage = `Showing ${preference?.preferencePlants.length} of ${plants.length} plants:`;
-  } else if (preference?.preferencePlants.length === plants.length) {
+    counterMessage = `Showing ${preference.preferencePlants.length} of ${plants.length} plants:`;
+  } else if (preference && preference.preferencePlants && preference.preferencePlants.length === (plants && plants.length)) {
     counterMessage = "";
   }
+  
 
   return (
     <>

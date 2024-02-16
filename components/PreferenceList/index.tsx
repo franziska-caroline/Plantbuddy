@@ -1,8 +1,14 @@
 import styled from "styled-components";
 import PreferenceCard from "../PreferenceCard";
 import Link from "next/link";
+import { Preference } from "../../types/preference";
 
-export default function PreferenceList({ preferences, handleDeletePreference }) {
+interface PreferenceListProps {
+  preferences: Preference[]; 
+  handleDeletePreference: (id: string) => void;
+}
+
+export default function PreferenceList({ preferences, handleDeletePreference }: PreferenceListProps) {
   return (
     <>
       {preferences.length === 0 ? (

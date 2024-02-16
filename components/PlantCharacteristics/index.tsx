@@ -1,12 +1,19 @@
 import Image from "next/image";
 import styled from "styled-components";
 
+interface PlantCharacteristicsProps {
+  headline: string;
+  imageAlt: string;
+  imageSrc: string;
+  info: string;
+}
+
 export default function PlantCharacteristics({
   headline,
   imageAlt,
   imageSrc,
   info,
-}) {
+}: PlantCharacteristicsProps) {
   return (
     <StyledCharacteristic>
       <Image src={imageSrc} alt={imageAlt} width={30} height={30} />

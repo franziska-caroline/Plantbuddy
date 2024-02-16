@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  fallback: string;
+  fallback: React.ReactNode;
 }
 
 export default function ProtectedRoute({ fallback, children} :ProtectedRouteProps) {
@@ -12,7 +12,8 @@ export default function ProtectedRoute({ fallback, children} :ProtectedRouteProp
 
   if (status !== "authenticated") {
     router.push("/login");
+    return <>{fallback}</>;
   }
 
-  return status === "authenticated" ? <>{children}</> : fallback;
+  return <>{children}</>;
 }

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useSession } from "next-auth/react";
 import { NextRouter, useRouter } from "next/router";
 import Navigation from "../Navigation";
-import { Session } from "../../types/session";
+import React from "react";
 
 export interface LayoutProps {
   children: React.ReactNode;
@@ -10,14 +10,13 @@ export interface LayoutProps {
 }
 
 export default function Layout({ children, theme }: LayoutProps) {
-  const { data: session } = useSession() as { data: Session };
-  const router: NextRouter = useRouter();
 
-  console.log(session);
+  const { status } = useSession();
+  const router: NextRouter = useRouter();
 
   return (
     <>
-      <StyledMain pathname={router.pathname} status={session?.status}>
+      <StyledMain pathname={router.pathname} status={status}>
         {children}
       </StyledMain>
       <Navigation theme={theme} />
@@ -27,7 +26,7 @@ export default function Layout({ children, theme }: LayoutProps) {
 
 interface StyledMainProps {
   pathname: string;
-  status?: string;
+  status: string;
 }
 
 const StyledMain = styled.main<StyledMainProps>`

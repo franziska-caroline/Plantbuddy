@@ -3,22 +3,26 @@ import { useState } from "react";
 import DeletePopup from "../DeletePopup";
 import Image from "next/image";
 import Link from "next/link";
+import { Entry } from "../../types/entry";
 
-export default function EntryCard({ entry, onDeleteEntry, url }) {
+interface EntryCardProps {
+  entry: Entry; 
+  onDeleteEntry: (id: string) => void;
+  url: string;
+}
+
+export default function EntryCard({ entry, onDeleteEntry, url }: EntryCardProps) {
   const [showPopup, setShowPopup] = useState(false);
-  const confirmDelete = (event) => {
-    event.preventDefault();
+  const confirmDelete = () => {
     setShowPopup(true);
   };
 
-  const handleConfirm = (event) => {
-    event.preventDefault();
+  const handleConfirm = () => {
     onDeleteEntry(entry.id);
     setShowPopup(false);
   };
 
-  const handleCancel = (event) => {
-    event.preventDefault();
+  const handleCancel = () => {
     setShowPopup(false);
   };
 

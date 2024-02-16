@@ -1,8 +1,7 @@
 import { useSession, signOut } from "next-auth/react";
 import styled from "styled-components";
-import { Session } from "../../types/session";
 
-interface CustomSession extends Session {
+interface CustomSession {
   user: {
     name: string,
   }

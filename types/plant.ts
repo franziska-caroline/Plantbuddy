@@ -1,4 +1,5 @@
 export interface Plant {
+    _id: string;
     species: string;
     commonName: string;
     waterNeeds: string;

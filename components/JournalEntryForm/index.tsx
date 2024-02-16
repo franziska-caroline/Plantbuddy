@@ -1,12 +1,18 @@
 import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import Headline from "@/components/Headline";
+import Headline from "../../components/Headline";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { Entry } from "../../types/entry";
 
-export default function EntryForm({ onFormSubmit, entry }) {
+interface EntryFormProps {
+  onFormSubmit: (id: string) => void;
+  entry: Entry;
+}
+
+export default function EntryForm({ onFormSubmit, entry }: EntryFormProps) {
   const [url, setUrl] = useState(entry ? entry.url : "");
   const [name, setName] = useState(entry ? entry.name : "");
   const [description, setDescription] = useState(
@@ -15,18 +21,21 @@ export default function EntryForm({ onFormSubmit, entry }) {
   const [careTipps, setCareTipps] = useState(entry ? entry.careTipps : "");
   const [location, setLocation] = useState(entry ? entry.location : "");
   const { status } = useSession();
-  const [showWarning, setShowWarning] = useState("");
-  const [file, setFile] = useState(null);
-  const [imageInputValue, setImageInputValue] = useState("");
+  const [showWarning, setShowWarning] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [, setImageInputValue] = useState("");
 
 
   const router = useRouter();
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setShowWarning("");
-    setUrl(URL.createObjectURL(file)); 
-    setFile(file);
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      setShowWarning(false);
+      setUrl(URL.createObjectURL(file)); 
+      setFile(file);
+    }
   };
 
   async function handleImageUpload() {
@@ -56,23 +65,25 @@ export default function EntryForm({ onFormSubmit, entry }) {
     }
   }
 
-  async function handleEditSubmit(event) {
+  async function handleEditSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const uploadedImageUrl = await handleImageUpload();
 
-    const entryObject = {
+    const entryObject: Entry = {
       url: uploadedImageUrl || (entry && entry.url),
       name,
       description,
       careTipps,
       location,
+      id: entry?.id || "",
     };
 
     if (entry && entry.id) {
       entryObject.id = entry.id;
     }
-    onFormSubmit(entryObject, entry.id);
+
+    onFormSubmit(entryObject.id);
     router.push("/journal");
   }
   const handleRemoveImage = () => {
@@ -81,8 +92,8 @@ export default function EntryForm({ onFormSubmit, entry }) {
     setImageInputValue("");
   };
 
-  function handleReset(event) {
-    event.target.reset();
+  function handleReset(event: React.FormEvent<HTMLFormElement>) {
+    event.currentTarget.reset();
 
     if (entry && entry.id) {
       router.push("/journal");
@@ -99,7 +110,6 @@ export default function EntryForm({ onFormSubmit, entry }) {
               <StyledDiv>
                 <StyledPreviewImage
                   alt="imagePreview"
-                  name="imagePreview"
                   width={100}
                   height={100}
                   src={url || (entry && entry.url)}
@@ -136,7 +146,6 @@ export default function EntryForm({ onFormSubmit, entry }) {
             />
             <StyledLabel htmlFor="name">Name</StyledLabel>
             <StyledTextarea
-              type="text"
               id="description"
               name="description"
               placeholder="Description"
@@ -145,7 +154,6 @@ export default function EntryForm({ onFormSubmit, entry }) {
             />
             <StyledLabel htmlFor="description">Description</StyledLabel>
             <StyledTextarea
-              type="text"
               id="care"
               name="care"
               placeholder="Care Tips"

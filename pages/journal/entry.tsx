@@ -7,8 +7,14 @@ import styled from "styled-components";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { Entry } from "../../types/entry";
 
-export default function EntryForm({ onFormSubmit }) {
+interface EntryFormProps {
+  onFormSubmit: (newEntry: Entry) => void
+};
+
+
+export default function EntryForm({ onFormSubmit }: EntryFormProps) {
   const { status } = useSession();
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
@@ -17,7 +23,7 @@ export default function EntryForm({ onFormSubmit }) {
   const [location, setLocation] = useState("");
   const router = useRouter();
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!url) {
@@ -44,13 +50,15 @@ export default function EntryForm({ onFormSubmit }) {
           description,
           careTipps,
           location,
+          id: "",
         };
+        
         onFormSubmit(entry);
         router.push("/journal");
       } else {
         console.error("Error uploading image:", response.statusText);
         alert(
-          `Error uploading image: ${errorData.error.message}. Please try again.`
+          `Error uploading image. Please try again.`
         );
       }
     } catch (error) {
@@ -59,14 +67,19 @@ export default function EntryForm({ onFormSubmit }) {
     }
   }
 
-  function handleReset(event) {
-    event.target.reset();
+  function handleReset(event: React.FormEvent<HTMLFormElement>) {
+    event.currentTarget.reset();
   }
 
-  function handleImageChange(event) {
-    const file = event.target.files[0];
-    setUrl(file);
-  }
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      setUrl(URL.createObjectURL(file)); 
+    }
+  };
+
 
   return (
     <>
@@ -96,28 +109,26 @@ export default function EntryForm({ onFormSubmit }) {
               name="name"
               placeholder="Name"
               onChange={(event) => setName(event.target.value)}
-              minLength="3"
-              maxLength="20"
+              minLength={3}
+              maxLength={20}
               required
             />
             <StyledLabel htmlFor="name">Name</StyledLabel>
             <StyledLabel htmlFor="description">Description</StyledLabel>
             <StyledTextarea
-              type="text"
               id="description"
               name="description"
-              minLength="3"
-              maxLength="300"
+              minLength={3}
+              maxLength={300}
               placeholder="Description"
               onChange={(event) => setDescription(event.target.value)}
             />
             <StyledLabel htmlFor="description">Description</StyledLabel>
             <StyledTextarea
-              type="text"
               id="care"
               name="care"
-              minLength="3"
-              maxLength="300"
+              minLength={3}
+              maxLength={300}
               placeholder="Care Tips"
               onChange={(event) => setCareTipps(event.target.value)}
             />
@@ -126,8 +137,8 @@ export default function EntryForm({ onFormSubmit }) {
               type="text"
               id="location"
               name="location"
-              minLength="3"
-              maxLength="40"
+              minLength={3}
+              maxLength={40}
               placeholder="Location"
               onChange={(event) => setLocation(event.target.value)}
             />

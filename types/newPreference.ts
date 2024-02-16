@@ -1,4 +1,4 @@
-export interface newPreference{
+export interface NewPreference{
     preferenceTitle?: string,
     plantSize?: string, 
     sunlightRequirement?: string,

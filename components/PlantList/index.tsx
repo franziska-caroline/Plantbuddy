@@ -1,5 +1,16 @@
 import styled from "styled-components";
+import { Plant } from "../../types/plant";
 import PlantCard from "../Card";
+
+interface PlantListProps {
+  favorites: string[],
+  onToggleFavorite: (plantId: string) => void;
+  search: string,
+  searchResult: Plant[];
+  sortedPlants: Plant[];
+  theme: string;
+  plants: Plant[];
+}
 
 export default function PlantList({
   favorites,
@@ -7,8 +18,8 @@ export default function PlantList({
   search,
   searchResult,
   sortedPlants,
-  theme
-}) {
+  theme,
+}: PlantListProps) {
   const error = search.length > 0 && searchResult.length === 0;
   if (error) {
     return (
@@ -59,9 +70,3 @@ const StyledSpan = styled.span`
   font-style: italic;
 `;
 
-const NoMatches = styled.p`
-  text-align: center;
-  margin: 1rem auto;
-  color: red;
-  max-width: 19rem;
-`;

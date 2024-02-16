@@ -1,4 +1,3 @@
-import Plant from "../db/models/plants";
 import React, { useState } from "react";
 import SearchField from "../components/SearchField";
 import Headline from "../components/Headline";
@@ -9,6 +8,15 @@ import { useSession } from "next-auth/react";
 import Header from "next/head";
 import Link from "next/link";
 import PlantList from "../components/PlantList";
+import { Plant } from "../types/plant";
+
+interface HomePageProps {
+  onToggleFavorite: (plantId: string) => void; 
+  favorites: string[];
+  plants: Plant[];
+  theme: string;
+  toggleTheme: (theme: string) => void,
+}
 
 export default function HomePage({
   onToggleFavorite,
@@ -16,7 +24,7 @@ export default function HomePage({
   plants,
   theme,
   toggleTheme,
-}) {
+}:HomePageProps) {
   const [search, setSearch] = useState("");
   const [sortPlants, setSortPlants] = useState(plants);
   const { status } = useSession();
@@ -24,7 +32,7 @@ export default function HomePage({
   const searchResult = plants.filter((plant) => {
     return plant.commonName.toLowerCase().startsWith(search.toLowerCase());
   });
-  function handleSortUpdate(newSortedPlants) {
+  function handleSortUpdate(newSortedPlants: Plant[]) {
     setSortPlants(newSortedPlants);
   }
 
@@ -42,7 +50,7 @@ export default function HomePage({
        height={25}>
       </Image>
       </Link>
-      <StyledThemeToggler onClick={toggleTheme} status={status}>
+      <StyledThemeToggler onClick={() => toggleTheme(theme === "light" ? "dark" : "light")} status={status}>
         {theme === "light" ? (
           <Image
             src="/assets/DarkModeIcon.svg"
@@ -61,7 +69,7 @@ export default function HomePage({
       </StyledThemeToggler>
       </StyledIconContainer>
       <main>
-        <SearchField onChange={setSearch} />
+      <SearchField onChange={(event) => setSearch(event.target.value)} />
         {search === "" && (
           <SortPlants onSortUpdate={handleSortUpdate} plants={plants} />
         )}
@@ -79,7 +87,7 @@ export default function HomePage({
   );
 }
 
-const StyledThemeToggler = styled.button`
+const StyledThemeToggler = styled.button<{status: string}>`
   position: fixed;
   top: ${({ status }) => (status === "authenticated" ? "3.5rem" : "0.5rem")};
   right: 0.5rem;
@@ -89,7 +97,7 @@ const StyledThemeToggler = styled.button`
   padding: 0;
 `;
 
-const StyledIconContainer = styled.div`
+const StyledIconContainer = styled.div<{status: string}>`
   position: fixed;
   top: ${({ status }) => (status === "authenticated" ? "3.5rem" : "0.5rem")};
   left: 0.5rem;

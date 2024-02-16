@@ -8,13 +8,21 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import BackButton from "../../components/BackButton";
 import Head from "next/head";
+import { Category } from "../../types/category";
+
+interface PlantDetailProps {
+  onToggleFavorite: (plantId: string) => void;
+  favorites: string;
+  categories: Category[];
+  theme: string;
+}
 
 export default function PlantDetail({
   onToggleFavorite,
   favorites,
   categories,
   theme,
-}) {
+}: PlantDetailProps) {
   const { status } = useSession();
   const router = useRouter();
   const { _id } = router.query;
@@ -27,11 +35,13 @@ export default function PlantDetail({
     return <div>Error occurred while fetching data</div>;
   if (!plant || !fetchedCategories) return <div>Loading...</div>;
 
-  const category = categories.find(
+  const category: Category | undefined = (categories as Category[]).find(
     (category) => category.slug === plant.categorySlug
   );
-  const categoryColor =
-    theme === "light" ? category.bgcolor : category.bgcolorDark;
+
+  // TODO set proper default color
+  const categoryColor: string = category ? 
+    (theme === "light" ? category?.bgcolor : category?.bgcolorDark) : "fffff";
 
   return (
     <>
@@ -52,7 +62,7 @@ export default function PlantDetail({
           height={200}
           alt={plant.commonName}
         />
-        <StyledSection $categoryColor={categoryColor}>
+        <StyledSection categoryColor={categoryColor}>
           <StyledName>{plant.commonName}</StyledName>
           <StyledSpecies>{plant.species}</StyledSpecies>
           <StyledPlantCharacteristics>
@@ -141,6 +151,10 @@ export default function PlantDetail({
   );
 }
 
+interface StyledSectionProps {
+  categoryColor: string;
+}
+
 const StyledMain = styled.main`
   position: relative;
 
@@ -163,9 +177,9 @@ const StyledImage = styled(Image)`
   }
 `;
 
-const StyledSection = styled.section`
+const StyledSection = styled.section<StyledSectionProps>`
   padding: 1rem 2rem 6rem 2rem;
-  background-color: ${({ $categoryColor }) => $categoryColor};
+  background-color: ${({ categoryColor }) => categoryColor};
 `;
 
 const StyledName = styled.h1`

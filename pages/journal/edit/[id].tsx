@@ -6,8 +6,14 @@ import Head from "next/head";
 import ProtectedRoute from "../../../components/ProtectedRoute";
 import BackButton from "../../../components/BackButton";
 import { StyledTitle } from "../../../components/Title/StyledTitle";
+import { Entry } from "../../../types/entry";
 
-export default function EditJournal({ entries, onEditEntry }) {
+interface EditJournalProps {
+  entries: Entry[];
+  onEditEntry: (id: string) => void
+}
+
+export default function EditJournal({ entries, onEditEntry }: EditJournalProps) {
   const router = useRouter();
   const { id } = router.query;
   const thisEntry = entries?.find((entry) => entry.id === id);

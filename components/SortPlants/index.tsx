@@ -1,20 +1,21 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { Plant } from "../../types/plant";
 
 export interface SortPlantsProps {
-  onSortUpdate: any;
-  plants: any[];
+  onSortUpdate: (plants: Plant[]) => void;
+  plants: Plant[];
 }
 
 export default function SortPlants({ onSortUpdate, plants }: SortPlantsProps) {
-  const [selectedOption, setSelectedOption] = useState("A to Z");
+  const [selectedOption, setSelectedOption] = useState<string>("A to Z");
 
-  const handleSortingChange = (option) => {
+  const handleSortingChange = (option: string): void => {
     setSelectedOption(option);
 
     let sortedPlants;
-    const lowerCaseCommonName = (plant) => plant.commonName.toLowerCase();
-    const sizeOrder = { small: 0, medium: 1, large: 2 };
+    const lowerCaseCommonName = (plant: Plant) => plant.commonName.toLowerCase();
+    const sizeOrder: Record<string, number> = { small: 0, medium: 1, large: 2 };
 
     if (option === "Z to A") {
       sortedPlants = [...plants].sort((a, b) =>

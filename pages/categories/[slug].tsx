@@ -5,7 +5,11 @@ import Image from "next/image";
 import BackButton from "../../components/BackButton";
 import Head from "next/head";
 
-export default function CategoryDetail({ theme }) {
+interface CategoryDetailProps {
+  theme: string;
+}
+
+export default function CategoryDetail({ theme }: CategoryDetailProps) {
   const router = useRouter();
   const { slug } = router.query;
 
@@ -32,7 +36,7 @@ export default function CategoryDetail({ theme }) {
           height={200}
           alt={category.title}
         />
-        <StyledSection $categoryColor={categoryColor}>
+        <StyledSection categoryColor={categoryColor}>
           <StyledName>{category.title}</StyledName>
           <article>
             <h3>Description</h3>
@@ -42,6 +46,10 @@ export default function CategoryDetail({ theme }) {
       </StyledMain>
     </>
   );
+}
+
+interface StyledSectionProps {
+  categoryColor: string;
 }
 
 const StyledMain = styled.main`
@@ -67,9 +75,9 @@ const StyledImage = styled(Image)`
   }
 `;
 
-const StyledSection = styled.section`
+const StyledSection = styled.section<StyledSectionProps>`
   padding: 1rem 2rem 2rem 2rem;
-  background-color: ${({ $categoryColor }) => $categoryColor};
+  background-color: ${({ categoryColor }) => categoryColor};
   color: ${({ theme }) => theme.infoText};
 `;
 

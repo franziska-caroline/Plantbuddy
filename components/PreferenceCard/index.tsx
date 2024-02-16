@@ -3,8 +3,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import DeletePopup from "../DeletePopup";
+import { Preference } from "../../types/preference";
 
-export default function PreferenceCard({ preference, onDeletePreference }) {
+
+interface PreferenceCardProps {
+  preference: Preference;
+  onDeletePreference: (id: string) => void;
+}
+
+export default function PreferenceCard({ preference, onDeletePreference }: PreferenceCardProps) {
   const [showPopup, setShowPopup] = useState(false);
 
   const confirmDelete = () => {

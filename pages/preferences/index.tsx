@@ -5,18 +5,28 @@ import Login from "../../components/Login";
 import { useSession } from "next-auth/react";
 import { StyledTitle } from "../../components/Title/StyledTitle";
 import Head from "next/head";
+import { Plant } from "../../types/plant";
+import { Preference } from "../../types/preference";
+import { NewPreference } from "../../types/newPreference";
+
+interface PreferencesPageProps {
+  plants: Plant[];
+  preferences: Preference[];
+  handleAddPreference: (NewPreference: NewPreference) => void;
+  handleDeletePreference: (id: string) => void;
+}
 
 export default function PreferencesPage({
   plants,
   preferences,
   handleAddPreference,
   handleDeletePreference,
-}) {
+}: PreferencesPageProps) {
   const { status } = useSession();
 
   return (
     <>
-     <Head>
+      <Head>
         <title>Add Preferences</title>
       </Head>
       <Headline />
@@ -37,4 +47,3 @@ export default function PreferencesPage({
     </>
   );
 }
-  

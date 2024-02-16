@@ -1,13 +1,22 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export const authOptions = {
+const githubClientId = process.env.GITHUB_ID;
+const githubClientSecret = process.env.GITHUB_SECRET;
+
+if (!githubClientId || !githubClientSecret) {
+  throw new Error(
+    "GitHub client ID or client secret not found in environment variables."
+  );
+}
+
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+      clientId: githubClientId,
+      clientSecret: githubClientSecret,
     }),
     CredentialsProvider({
       name: "credentials",
@@ -17,11 +26,12 @@ export const authOptions = {
       },
       async authorize(credentials) {
         if (
-          credentials.username === "plant" &&
-          credentials.password === "buddy"
+          credentials?.username === "plant" &&
+          credentials?.password === "buddy"
         ) {
           return {
             name: "Buddy",
+            id: "Buddy",
           };
         } else {
           return null;

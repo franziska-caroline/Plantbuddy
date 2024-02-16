@@ -2,6 +2,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import { NextRouter, useRouter } from "next/router";
 import { MouseEventHandler } from "react";
+import React from "react";
 
 export interface FavoriteButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;

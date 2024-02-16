@@ -7,8 +7,14 @@ import EntryCard from "../../components/JournalEntryCard";
 import { useSession } from "next-auth/react";
 import Login from "../../components/Login";
 import Head from "next/head";
+import { Entry } from "../../types/entry";
 
-export default function JournalOverviewPage({ entries, handleDeleteEntry, }) {
+interface JournalOverviewPageProps {
+  entries: Entry[];
+  handleDeleteEntry: (id: string) => void;
+}
+
+export default function JournalOverviewPage({ entries, handleDeleteEntry, }: JournalOverviewPageProps) {
   const { status } = useSession();
 
   return (
