@@ -9,6 +9,7 @@ interface PreferenceListProps {
 }
 
 export default function PreferenceList({ preferences, handleDeletePreference }: PreferenceListProps) {
+
   return (
     <>
       {preferences.length === 0 ? (

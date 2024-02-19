@@ -25,14 +25,15 @@ export default function Preference({
   plants,
   theme,
 }: PreferenceProps) {
+
   const router = useRouter();
   const { id } = router.query;
 
   const preference = preferences.find((preference) => preference.id === id);
 
   const preferencePlants = plants.filter((plant) =>
-    preference?.preferencePlants?.includes(plant)
-  );
+  preference?.preferencePlants?.some((preferencePlant) => preferencePlant._id === plant._id)
+);
 
   let counterMessage;
 

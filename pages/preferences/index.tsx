@@ -7,12 +7,11 @@ import { StyledTitle } from "../../components/Title/StyledTitle";
 import Head from "next/head";
 import { Plant } from "../../types/plant";
 import { Preference } from "../../types/preference";
-import { NewPreference } from "../../types/newPreference";
 
 interface PreferencesPageProps {
   plants: Plant[];
   preferences: Preference[];
-  handleAddPreference: (NewPreference: NewPreference) => void;
+  handleAddPreference: (NewPreference: Preference) => void;
   handleDeletePreference: (id: string) => void;
 }
 

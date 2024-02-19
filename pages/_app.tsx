@@ -9,7 +9,6 @@ import fetcher from "../utils/fetcher";
 import useSWR from "swr";
 import { SessionProvider } from "next-auth/react";
 import React from "react";
-import { NewPreference } from "../types/newPreference";
 import { Preference } from "../types/preference";
 import { NewEntry } from "../types/newEntry";
 import { Entry } from "../types/entry";
@@ -24,7 +23,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     defaultValue: "light",
   });
 
-  function toggleTheme():void {
+  function toggleTheme(): void {
     theme === "light" ? setTheme("dark") : setTheme("light");
   }
 
@@ -54,8 +53,14 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     }
   }
 
-  function handleAddPreference(newPreference: NewPreference) {
-    setPreferences([...preferences, { id: uid(), ...newPreference }]);
+  function handleAddPreference(newPreference: Omit<Preference, "id">) {
+    const newId = uid();
+    const newPrefWithId: Preference = {
+      ...newPreference,
+      id: newId
+    };
+    const updatedPreferences = [...preferences, newPrefWithId];
+    setPreferences(updatedPreferences);
   }
 
   function handleEditPreference(editedPreference: Preference) {

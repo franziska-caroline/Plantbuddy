@@ -3,11 +3,10 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Plant } from "../../types/plant";
 import { Preference } from "../../types/preference";
-import { NewPreference } from "../../types/newPreference";
 
 interface FilterFormProps {
   plants: Plant[];
-  onAddPreference?: (newPreference: NewPreference) => void;
+  onAddPreference?: (newPreference: Preference) => void;
   preferenceFilterSettings?: Preference;
   preferenceFilterTitle?: string;
   onEditPreference?: (editedPreference: Preference) => void;
@@ -18,7 +17,7 @@ export default function FilterForm({
   plants,
   onAddPreference,
   preferenceFilterSettings = {
-    id: "",
+    id: ""
   },
   preferenceFilterTitle = "",
   onEditPreference,
@@ -80,7 +79,6 @@ export default function FilterForm({
         )
         .map((plant) => plant),
       filterSettings: {
-        id: "",
         plantSize: settings.plantSize,
         sunlightRequirement: settings.sunlightRequirement,
         waterNeeds: settings.waterNeeds,
