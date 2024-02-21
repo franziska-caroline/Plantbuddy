@@ -16,7 +16,6 @@ interface EntryFormProps {
 
 export default function EntryForm({ onFormSubmit }: EntryFormProps) {
   const { status } = useSession();
-  const [url, setUrl] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [careTipps, setCareTipps] = useState("");
@@ -26,13 +25,11 @@ export default function EntryForm({ onFormSubmit }: EntryFormProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!url) {
+    const formData = new FormData(event.currentTarget);
+    if (!formData.get('plantbuddyImage')) {
       alert("Please select an image.");
       return;
     }
-
-    const formData = new FormData();
-    formData.append("plantbuddyImage", url);
 
     try {
       const response = await fetch("/api/upload", {
@@ -42,7 +39,6 @@ export default function EntryForm({ onFormSubmit }: EntryFormProps) {
 
       if (response.ok) {
         const image = await response.json();
-        setUrl(image.secure_url);
 
         const entry = {
           url: image.secure_url,
@@ -71,16 +67,6 @@ export default function EntryForm({ onFormSubmit }: EntryFormProps) {
     event.currentTarget.reset();
   }
 
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      setUrl(URL.createObjectURL(file)); 
-    }
-  };
-
-
   return (
     <>
       <Head>
@@ -99,7 +85,6 @@ export default function EntryForm({ onFormSubmit }: EntryFormProps) {
               id="plantbuddyImage"
               name="plantbuddyImage"
               accept="image/*, .png, .jpeg, .jpg, .webp"
-              onChange={handleImageChange}
               required
             />
             <StyledLabel htmlFor="plantbuddyImage">Image</StyledLabel>
