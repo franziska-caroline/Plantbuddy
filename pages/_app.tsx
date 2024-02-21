@@ -10,7 +10,6 @@ import useSWR from "swr";
 import { SessionProvider } from "next-auth/react";
 import React from "react";
 import { Preference } from "../types/preference";
-import { NewEntry } from "../types/newEntry";
 import { Entry } from "../types/entry";
 
 interface AppProps {
@@ -71,7 +70,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     );
   }
 
-  function handleDeletePreference(id: string) {
+  function handleDeletePreference(id: string | undefined ) {
     setPreferences(preferences.filter((preference) => preference.id !== id));
   }
 
@@ -85,9 +84,11 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     return <div>Error occurred while fetching data</div>;
   if (!plants || !categories) return <div>Loading...</div>;
 
-  function handleFormSubmit(data: NewEntry) {
-    const newEntry = { id: uid(), ...data };
-    setEntries((prevFormEntry) => [...prevFormEntry, newEntry]);
+  function handleFormSubmit(data: Omit<Entry, "id">) {
+    const newEntryId = uid();
+    const newEntryWithId: Entry = {...data, id: newEntryId };
+    const updatedEntry = [...entries, newEntryWithId];
+    setEntries(updatedEntry);
   }
 
   function handleEditEntry(editedEntry: Entry) {

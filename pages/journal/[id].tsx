@@ -20,6 +20,8 @@ export default function EntryDetail({ entries }: EntryDetailProps) {
     return <p>Entry not found</p>;
   }
 
+console.log(id);
+
   return (
     <>
       <Head>
@@ -30,10 +32,10 @@ export default function EntryDetail({ entries }: EntryDetailProps) {
       <BackButton />
       <StyledEditLink href={`/journal/edit/${entry.id}`}>Edit</StyledEditLink>
         <StyledImage
-          src={entry.url}
+          src={entry.url ||  ""}
           width={375}
           height={375}
-          alt={entry.name}
+          alt={entry.name || ""}
         />
         <StyledArticle>
           <StyledName lang="en">{entry.name}</StyledName>

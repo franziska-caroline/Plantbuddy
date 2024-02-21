@@ -12,7 +12,7 @@ interface PreferencesPageProps {
   plants: Plant[];
   preferences: Preference[];
   handleAddPreference: (NewPreference: Preference) => void;
-  handleDeletePreference: (id: string) => void;
+  handleDeletePreference: (id: string | undefined ) => void;
 }
 
 export default function PreferencesPage({

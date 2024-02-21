@@ -1,7 +1,7 @@
 import { Plant } from "./plant";
 
 export interface Preference {
-    id: string;
+    id: string | undefined;
     preferenceTitle?: string;
     plantSize?: string; 
     sunlightRequirement?: string;

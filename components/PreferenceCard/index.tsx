@@ -8,7 +8,7 @@ import { Preference } from "../../types/preference";
 
 interface PreferenceCardProps {
   preference: Preference;
-  onDeletePreference: (id: string) => void;
+  onDeletePreference: (id: string | undefined) => void;
 }
 
 export default function PreferenceCard({ preference, onDeletePreference }: PreferenceCardProps) {

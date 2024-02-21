@@ -13,7 +13,6 @@ interface EntryFormProps {
   onFormSubmit: (newEntry: Entry) => void
 };
 
-
 export default function EntryForm({ onFormSubmit }: EntryFormProps) {
   const { status } = useSession();
   const [name, setName] = useState("");
@@ -48,7 +47,8 @@ export default function EntryForm({ onFormSubmit }: EntryFormProps) {
           location,
           id: "",
         };
-        
+        console.log(entry.id);
+
         onFormSubmit(entry);
         router.push("/journal");
       } else {

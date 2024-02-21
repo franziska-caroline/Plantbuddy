@@ -11,7 +11,7 @@ import { Entry } from "../../types/entry";
 
 interface JournalOverviewPageProps {
   entries: Entry[];
-  handleDeleteEntry: (id: string) => void;
+  handleDeleteEntry: (id: string | undefined ) => void;
 }
 
 export default function JournalOverviewPage({ entries, handleDeleteEntry, }: JournalOverviewPageProps) {

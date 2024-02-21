@@ -84,6 +84,7 @@ export default function FilterForm({
         waterNeeds: settings.waterNeeds,
         optimalTemperature: settings.optimalTemperature,
         petFriendly: settings.petFriendly,
+        id: "" || undefined,
       },
     };
 

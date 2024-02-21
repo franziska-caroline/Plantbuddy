@@ -5,15 +5,15 @@ import { Preference } from "../../types/preference";
 
 interface PreferenceListProps {
   preferences: Preference[]; 
-  handleDeletePreference: (id: string) => void;
+  handleDeletePreference: (id: string | undefined)  => void;
 }
 
 export default function PreferenceList({ preferences, handleDeletePreference }: PreferenceListProps) {
 
   return (
     <>
-      {preferences.length === 0 ? (
-        <StyledCallText>
+      {preferences.length === 0 ? ( 
+        <StyledCallText> 
           Start adding your <StyledSpan>first</StyledSpan> preference!
         </StyledCallText>
       ) : (

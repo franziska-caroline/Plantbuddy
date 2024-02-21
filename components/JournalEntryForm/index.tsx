@@ -83,7 +83,9 @@ export default function EntryForm({ onFormSubmit, entry }: EntryFormProps) {
       entryObject.id = entry.id;
     }
 
-    onFormSubmit(entryObject.id);
+    const entryId = entryObject.id || "";
+
+    onFormSubmit(entryId);
     router.push("/journal");
   }
   const handleRemoveImage = () => {
@@ -112,7 +114,7 @@ export default function EntryForm({ onFormSubmit, entry }: EntryFormProps) {
                   alt="imagePreview"
                   width={100}
                   height={100}
-                  src={url || (entry && entry.url)}
+                  src={url || (entry && entry.url) || "https://images.unsplash.com/photo-1477554193778-9562c28588c0?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
                 />
                 <StyledImageRemoveButton
                   type="button"

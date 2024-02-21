@@ -7,8 +7,8 @@ import { Entry } from "../../types/entry";
 
 interface EntryCardProps {
   entry: Entry; 
-  onDeleteEntry: (id: string) => void;
-  url: string;
+  onDeleteEntry: (id: string | undefined ) => void;
+  url: string | undefined;
 }
 
 export default function EntryCard({ entry, onDeleteEntry, url }: EntryCardProps) {
