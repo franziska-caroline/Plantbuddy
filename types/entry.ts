@@ -1,5 +1,5 @@
 export interface Entry {
-    _id: string | undefined;
+    _id?: string | undefined;
     url?: string;
     name?: string;
     description?: string;

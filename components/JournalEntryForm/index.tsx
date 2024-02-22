@@ -76,14 +76,14 @@ export default function EntryForm({ onFormSubmit, entry }: EntryFormProps) {
       description,
       careTipps,
       location,
-      id: entry?.id || "",
+      _id: entry?._id || "",
     };
 
-    if (entry && entry.id) {
-      entryObject.id = entry.id;
+    if (entry && entry._id) {
+      entryObject._id = entry._id;
     }
 
-    const entryId = entryObject.id || "";
+    const entryId = entryObject._id || "";
 
     onFormSubmit(entryId);
     router.push("/journal");
@@ -97,7 +97,7 @@ export default function EntryForm({ onFormSubmit, entry }: EntryFormProps) {
   function handleReset(event: React.FormEvent<HTMLFormElement>) {
     event.currentTarget.reset();
 
-    if (entry && entry.id) {
+    if (entry && entry._id) {
       router.push("/journal");
     }
   }

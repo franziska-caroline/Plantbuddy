@@ -17,7 +17,20 @@ export default async function handler(request: NextApiRequest, response: NextApi
     console.error(error);
     response.status(500).json({ message: "An error occurred while fetching the entry" });
   }
-}
 
+  // Put
+  if (request.method === "PUT") {
+    const updateEntry = request.body;
+    await Entry.findByIdAndUpdate(_id, updateEntry);
+    response.status(200).json({ status: `Entry ${_id} updated!` });
+  }
+
+  // Delete
+  if (request.method === "DELETE") {
+    await Entry.findByIdAndDelete(_id);
+    response.status(200).json({ status: "item deleted" });
+  }
+  
+}
 
 

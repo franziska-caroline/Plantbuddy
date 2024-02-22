@@ -25,7 +25,7 @@ export default function EntryDetail() {
       <ProtectedRoute fallback={"/"}>
       <StyledMain>
       <BackButton />
-      <StyledEditLink href={`/journal/edit/${entry.id}`}>Edit</StyledEditLink>
+      <StyledEditLink href={`/journal/edit/${entry._id}`}>Edit</StyledEditLink>
         <StyledImage
           src={entry.url ||  ""}
           width={375}

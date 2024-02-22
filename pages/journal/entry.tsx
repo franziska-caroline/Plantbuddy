@@ -45,9 +45,7 @@ export default function EntryForm({ onFormSubmit }: EntryFormProps) {
           description,
           careTipps,
           location,
-          id: "",
         };
-        console.log(entry.id);
 
         onFormSubmit(entry);
         router.push("/journal");
