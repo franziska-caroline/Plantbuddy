@@ -40,9 +40,9 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     }
   );
 
-  const [entries, setEntries] = useLocalStorageState<Entry[]>("entries", {
-    defaultValue: [],
-  });
+  // const [entries, setEntries] = useLocalStorageState<Entry[]>("entries", {
+  //   defaultValue: [],
+  // });
 
   function handleToggleFavorite(plantId: string) {
     if (favorites.includes(plantId)) {
@@ -74,15 +74,18 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     setPreferences(preferences.filter((preference) => preference.id !== id));
   }
 
+  // Fetch Data
   const { data: plants, error: plantsError } = useSWR("/api/plants", fetcher);
   const { data: categories, error: categoriesError } = useSWR(
     "/api/categories",
     fetcher
   );
+    const { data: entries, error: entriesError } = useSWR("/api/entries", fetcher);
 
-  if (plantsError || categoriesError)
+
+  if (plantsError || categoriesError || entriesError)
     return <div>Error occurred while fetching data</div>;
-  if (!plants || !categories) return <div>Loading...</div>;
+  if (!plants || !categories ) return <div>Loading...</div>;
 
   function handleFormSubmit(data: Omit<Entry, "id">) {
     const newEntryId = uid();

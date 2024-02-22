@@ -17,6 +17,7 @@ export default function CategoryDetail({ theme }: CategoryDetailProps) {
     `/api/categories/${slug}`
   );
 
+
   if (categoriesError) return <div>Error occurred while fetching data</div>;
   if (!category) return <div>Loading...</div>;
 

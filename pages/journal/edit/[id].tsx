@@ -15,8 +15,8 @@ interface EditJournalProps {
 
 export default function EditJournal({ entries, onEditEntry }: EditJournalProps) {
   const router = useRouter();
-  const { id } = router.query;
-  const thisEntry = entries?.find((entry) => entry.id === id);
+  const { _id } = router.query;
+  const thisEntry = entries?.find((entry) => entry._id === _id);
 
   if (!thisEntry) {
     return <div>Entry not found</div>;

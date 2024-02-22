@@ -17,6 +17,7 @@ interface JournalOverviewPageProps {
 export default function JournalOverviewPage({ entries, handleDeleteEntry, }: JournalOverviewPageProps) {
   const { status } = useSession();
 
+
   return (
     <>
       <Head>
@@ -35,8 +36,8 @@ export default function JournalOverviewPage({ entries, handleDeleteEntry, }: Jou
             <StyledEntriesContainer>
               {entries.length > 0 ? (
                 entries.map((entry) => (
-                  <StyledEntries key={entry.id}>
-                    <StyledLink href={`/journal/${entry.id}`}>
+                  <StyledEntries key={entry._id}>
+                    <StyledLink href={`/journal/${entry?._id}`}>
                       <EntryCard
                         url={entry.url}
                         entry={entry}
