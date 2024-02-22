@@ -95,8 +95,6 @@ export default function FilterForm({
       onAddPreference(preferenceData);
       event.currentTarget.reset();
     }
-    // TODO
-    //event.target.title.focus();
   }
 
   function handleCancel() {
