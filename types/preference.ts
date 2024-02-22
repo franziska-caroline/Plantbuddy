@@ -7,7 +7,7 @@ export interface Preference {
     sunlightRequirement?: string;
     waterNeeds?: string;
     optimalTemperature?: string;
-    petFriendly?: boolean;
+    petFriendly?: boolean | string;
     filterSettings?: Preference;
     preferencePlants?: Plant[];
 }

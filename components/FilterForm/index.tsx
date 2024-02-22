@@ -31,7 +31,7 @@ export default function FilterForm({
     sunlightRequirement: preferenceFilterSettings.sunlightRequirement || "",
     waterNeeds: preferenceFilterSettings.waterNeeds || "",
     optimalTemperature: preferenceFilterSettings.optimalTemperature || "",
-    petFriendly: preferenceFilterSettings.petFriendly || false,
+    petFriendly: preferenceFilterSettings.petFriendly || "",
   };
 
   const [settings, setSettings] = useState(initialPreferenceFilterSettings);
@@ -54,7 +54,7 @@ export default function FilterForm({
     !temperature ||
     plants.find((plant) => plant._id === plantId)?.optimalTemperature ===
       temperature;
-  const filterPetFriendly = (plantId: string, isPetFriendly: boolean) =>
+  const filterPetFriendly = (plantId: string, isPetFriendly: boolean | string) =>
     !isPetFriendly ||
     plants.find((plant) => plant._id === plantId)?.petFriendly ===
       (isPetFriendly === true);
@@ -199,7 +199,7 @@ export default function FilterForm({
         onChange={(event) =>
           setSettings({
             ...settings,
-            petFriendly: str2bool(event.target.value),
+           petFriendly: event.target.value
           })
         }
         defaultValue={String(settings.petFriendly)}
@@ -283,10 +283,3 @@ const StyledButton = styled.button`
   width: 9rem;
 `;
 
-function str2bool(value: string): boolean {
-  if (value && typeof value === "string") {
-    if (value.toLowerCase() === "true") return true;
-    if (value.toLowerCase() === "false") return false;
-  }
-  return false;
-}
