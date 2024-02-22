@@ -9,6 +9,7 @@ import { StyledTitle } from "../../../components/Title/StyledTitle";
 import Head from "next/head";
 import { Preference } from "../../../types/preference";
 import { Plant } from "../../../types/plant";
+import React from "react";
 
 interface EditPreferencePageProps {
   preferences: Preference[];
