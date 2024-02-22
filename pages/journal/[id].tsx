@@ -20,8 +20,6 @@ export default function EntryDetail({ entries }: EntryDetailProps) {
     return <p>Entry not found</p>;
   }
 
-console.log(id);
-
   return (
     <>
       <Head>

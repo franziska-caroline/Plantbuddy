@@ -1,28 +1,36 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import DeletePopup from "../DeletePopup";
 import Image from "next/image";
 import Link from "next/link";
 import { Entry } from "../../types/entry";
 
 interface EntryCardProps {
-  entry: Entry; 
-  onDeleteEntry: (id: string | undefined ) => void;
+  entry: Entry;
+  onDeleteEntry: (id: string | undefined) => void;
   url: string | undefined;
 }
 
-export default function EntryCard({ entry, onDeleteEntry, url }: EntryCardProps) {
+export default function EntryCard({
+  entry,
+  onDeleteEntry,
+  url,
+}: EntryCardProps) {
   const [showPopup, setShowPopup] = useState(false);
-  const confirmDelete = () => {
+
+  const confirmDelete = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setShowPopup(true);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     onDeleteEntry(entry.id);
     setShowPopup(false);
   };
 
-  const handleCancel = () => {
+  const handleCancel = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setShowPopup(false);
   };
 
@@ -72,6 +80,10 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   display: flex;
   align-items: center;
+  color: ${({ theme }) => theme.white};
+  font-weight: 600;
+  cursor: pointer;
+  max-width: 15rem;
 `;
 
 const StyledEntryImage = styled.img`
