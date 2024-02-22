@@ -11,6 +11,7 @@ import { SessionProvider } from "next-auth/react";
 import React from "react";
 import { Preference } from "../types/preference";
 import { Entry } from "../types/entry";
+import { useRouter } from "next/router";
 
 interface AppProps {
   Component: React.ComponentType<any>;
@@ -18,6 +19,9 @@ interface AppProps {
 }
 
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
+  const router = useRouter();
+  const { mutate } = useSWR("/api/entries/");
+
   const [theme, setTheme] = useLocalStorageState<string>("theme", {
     defaultValue: "light",
   });
@@ -40,10 +44,6 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     }
   );
 
-  // const [entries, setEntries] = useLocalStorageState<Entry[]>("entries", {
-  //   defaultValue: [],
-  // });
-
   function handleToggleFavorite(plantId: string) {
     if (favorites.includes(plantId)) {
       setFavorites(favorites?.filter((favorite) => favorite !== plantId));
@@ -56,7 +56,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     const newId = uid();
     const newPrefWithId: Preference = {
       ...newPreference,
-      id: newId
+      id: newId,
     };
     const updatedPreferences = [...preferences, newPrefWithId];
     setPreferences(updatedPreferences);
@@ -70,7 +70,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     );
   }
 
-  function handleDeletePreference(id: string | undefined ) {
+  function handleDeletePreference(id: string | undefined) {
     setPreferences(preferences.filter((preference) => preference.id !== id));
   }
 
@@ -80,18 +80,29 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     "/api/categories",
     fetcher
   );
-    const { data: entries, error: entriesError } = useSWR("/api/entries", fetcher);
-
+  const { data: entries, error: entriesError } = useSWR(
+    "/api/entries",
+    fetcher
+  );
 
   if (plantsError || categoriesError || entriesError)
     return <div>Error occurred while fetching data</div>;
-  if (!plants || !categories ) return <div>Loading...</div>;
+  if (!plants || !categories) return <div>Loading...</div>;
 
-  function handleFormSubmit(data: Omit<Entry, "id">) {
-    const newEntryId = uid();
-    const newEntryWithId: Entry = {...data, id: newEntryId };
-    const updatedEntry = [...entries, newEntryWithId];
-    setEntries(updatedEntry);
+  // Entries
+  async function handleFormSubmit(data: Entry) {
+    const response = await fetch("/api/entries", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      console.log("Eintrag erfolgreich hinzugefügt");
+    } else {
+      console.error("Fehler beim Hinzufügen des Eintrags");
+    }
   }
 
   function handleEditEntry(editedEntry: Entry) {

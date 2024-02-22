@@ -10,4 +10,16 @@ export default async function handler(request: NextApiRequest, response: NextApi
     response.status(200).json(entries);
   }
 
+  if (request.method === "POST") {
+    try {
+      const entryData = request.body;
+      await Entry.create(entryData);
+
+      response.status(201).json({ status: "Place created" });
+    } catch (error) {
+      console.log(error);
+      response.status(400).json({ message: "Bad request" });
+    }
+  }
+
 }
