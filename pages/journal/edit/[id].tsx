@@ -7,9 +7,11 @@ import ProtectedRoute from "../../../components/ProtectedRoute";
 import BackButton from "../../../components/BackButton";
 import { StyledTitle } from "../../../components/Title/StyledTitle";
 import useSWR from "swr";
+import { Entry } from "../../../types/entry";
+
 
 interface EditJournalProps {
-  onEditEntry: (id: string) => void
+  onEditEntry: (entry: Entry) => void;
 }
 
 export default function EditJournal({ onEditEntry }: EditJournalProps) {
@@ -17,8 +19,11 @@ export default function EditJournal({ onEditEntry }: EditJournalProps) {
   const { id } = router.query;
   const { data: thisEntry, error: entryError } = useSWR(`/api/entries/${id}`);
 
-  if (entryError)
-    return <div>Error occurred while fetching data</div>;
+  console.log("Edit Journal id:", id);
+  console.log("Edit Journal entry:", thisEntry);
+
+
+  if (entryError) return <div>Error occurred while fetching data</div>;
   if (!thisEntry) return <div>Entry not Found</div>;
 
   return (

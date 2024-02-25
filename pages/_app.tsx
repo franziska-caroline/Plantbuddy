@@ -33,7 +33,10 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     mutate: mutateEntries,
   } = useSWR("/api/entries/", fetcher);
 
-  const { _id } = router.query;
+  const { id } = router.query;
+  console.log("id:", id);
+  console.log(router.query);
+
   const [theme, setTheme] = useLocalStorageState<string>("theme", {
     defaultValue: "light",
   });
@@ -113,14 +116,14 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     } else {
       console.error("Fehler beim Bearbeiten des Eintrags");
     }
-    setEntries(entries.filter(entry => entry._id !== _id));
+    setEntries(entries.filter((entry) => entry._id !== editedEntry._id));
   }
-  
+
   async function handleDeleteEntry(_id: string) {
     await fetch(`/api/entries/${_id}`, {
       method: "DELETE",
     });
-    setEntries(entries.filter(entry => entry._id !== _id));
+    setEntries(entries.filter((entry) => entry._id !== _id));
   }
 
   // Favorite
