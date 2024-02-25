@@ -25,10 +25,7 @@ export default function EntryForm({ onFormSubmit, entry }: EntryFormProps) {
   const [file, setFile] = useState<File | null>(null);
   const [, setImageInputValue] = useState("");
 
-
   const router = useRouter();
-  console.log("Form entry:", entry);
-
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -39,7 +36,6 @@ export default function EntryForm({ onFormSubmit, entry }: EntryFormProps) {
       setFile(file);
     }
   };
-
 
   async function handleImageUpload() {
     if (!file) {

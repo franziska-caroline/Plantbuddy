@@ -34,8 +34,6 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   } = useSWR("/api/entries/", fetcher);
 
   const { id } = router.query;
-  console.log("id:", id);
-  console.log(router.query);
 
   const [theme, setTheme] = useLocalStorageState<string>("theme", {
     defaultValue: "light",

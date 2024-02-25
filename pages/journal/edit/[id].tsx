@@ -19,10 +19,6 @@ export default function EditJournal({ onEditEntry }: EditJournalProps) {
   const { id } = router.query;
   const { data: thisEntry, error: entryError } = useSWR(`/api/entries/${id}`);
 
-  console.log("Edit Journal id:", id);
-  console.log("Edit Journal entry:", thisEntry);
-
-
   if (entryError) return <div>Error occurred while fetching data</div>;
   if (!thisEntry) return <div>Entry not Found</div>;
 
