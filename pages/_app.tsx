@@ -33,8 +33,6 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     mutate: mutateEntries,
   } = useSWR("/api/entries/", fetcher);
 
-  const { id } = router.query;
-
   const [theme, setTheme] = useLocalStorageState<string>("theme", {
     defaultValue: "light",
   });
@@ -66,23 +64,22 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   }, [entriesData]);
 
   // Entries
-  async function fetchEntries() {
-    try {
-      const response = await fetch("/api/entries");
-      if (response.ok) {
-        const entriesData = await response.json();
-        setEntries(entriesData);
-      } else {
-        throw new Error("Failed to fetch entries");
-      }
-    } catch (error) {
-      console.error("Error fetching entries:", error);
-    }
-  }
-
   useEffect(() => {
+    async function fetchEntries() {
+      try {
+        const response = await fetch("/api/entries");
+        if (response.ok) {
+          const entriesData = await response.json();
+          setEntries(entriesData);
+        } else {
+          throw new Error("Failed to fetch entries");
+        }
+      } catch (error) {
+        console.error("Error fetching entries:", error);
+      }
+    }
     fetchEntries();
-  }, []);
+  }, [router]);
 
   async function handleFormSubmit(data: Entry) {
     const response = await fetch("/api/entries", {
@@ -121,7 +118,8 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     await fetch(`/api/entries/${_id}`, {
       method: "DELETE",
     });
-    setEntries(entries.filter((entry) => entry._id !== _id));
+    //setEntries(entries.filter((entry) => entry._id !== _id));
+    mutateEntries(entries.filter((entry) => entry._id !== _id));
   }
 
   // Favorite
