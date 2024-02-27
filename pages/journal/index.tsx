@@ -17,6 +17,8 @@ interface JournalOverviewPageProps {
 export default function JournalOverviewPage({ entries, handleDeleteEntry, }: JournalOverviewPageProps) {
   const { status } = useSession();
 
+  console.log(entries);
+
   return (
     <>
       <Head>

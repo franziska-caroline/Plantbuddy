@@ -1,6 +1,7 @@
 import dbConnect from "../../../db/connect";
 import Entry from "../../../db/models/entries";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/react";
 
 export default async function handler(
   request: NextApiRequest,
@@ -8,11 +9,16 @@ export default async function handler(
 ) {
   await dbConnect();
 
+  const session = await getSession({ req: request });
+
   const { _id } = request.query;
 
   try {
     if (request.method === "GET") {
-      const entry = await Entry.findById(_id);
+      const entry = await Entry.findById({
+        _id,
+        benutzerEmail: session?.user?.email,
+      });
       if (!entry) {
         return response.status(404).json({ message: "Entry not found" });
       }
@@ -27,7 +33,10 @@ export default async function handler(
     }
 
     if (request.method === "DELETE") {
-      await Entry.findByIdAndDelete(_id);
+      await Entry.findByIdAndDelete({
+        _id,
+        benutzerEmail: session?.user?.email,
+      });
       response.status(200).json({ status: "Item deleted" });
       return;
     }

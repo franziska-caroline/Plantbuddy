@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Preference } from "../types/preference";
 import { Entry } from "../types/entry";
 import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
 
 interface AppProps {
   Component: React.ComponentType<any>;
@@ -67,6 +68,10 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   useEffect(() => {
     async function fetchEntries() {
       try {
+        const session = await getSession();
+        if (!session) {
+          return;
+        }
         const response = await fetch("/api/entries");
         if (response.ok) {
           const entriesData = await response.json();
@@ -82,6 +87,10 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   }, [router]);
 
   async function handleFormSubmit(data: Entry) {
+    const session = await getSession();
+    if (!session) {
+      return;
+    }
     const response = await fetch("/api/entries", {
       method: "POST",
       headers: {
@@ -99,6 +108,10 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   }
 
   async function handleEditEntry(editedEntry: Entry) {
+    const session = await getSession();
+    if (!session) {
+      return;
+    }
     const response = await fetch(`/api/entries/${editedEntry._id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },

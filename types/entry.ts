@@ -1,4 +1,5 @@
 export interface Entry {
+    benutzerEmail?: string | undefined;
     _id?: string | undefined;
     url?: string;
     name?: string;
