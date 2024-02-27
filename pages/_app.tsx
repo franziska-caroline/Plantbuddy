@@ -98,6 +98,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       },
       body: JSON.stringify(data),
     });
+
     if (response.ok) {
       router.push("/journal");
       mutateEntries();

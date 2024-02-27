@@ -9,7 +9,7 @@ export default async function handler(
 ) {
   await dbConnect();
 
- const session = await getSession({ req: request });
+  const session = await getSession({ req: request });
 
   if (request.method === "GET") {
     try {
@@ -24,10 +24,7 @@ export default async function handler(
   if (request.method === "POST") {
     try {
       const entryData = request.body;
-      const newEntry = new Entry({
-        ...entryData,
-        benutzerEmail: session?.user?.email,
-      });
+      const newEntry = new Entry(entryData);
 
       await newEntry.save();
 
@@ -38,5 +35,3 @@ export default async function handler(
     }
   }
 }
-
-

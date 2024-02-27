@@ -8,6 +8,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { Entry } from "../../types/entry";
+import { getSession } from "next-auth/react";
+
 
 interface EntryFormProps {
   onFormSubmit: (newEntry: Entry) => void
@@ -30,6 +32,8 @@ export default function EntryForm({ onFormSubmit }: EntryFormProps) {
       return;
     }
 
+    const session = await getSession();
+
     try {
       const response = await fetch("/api/upload", {
         method: "POST",
@@ -45,6 +49,7 @@ export default function EntryForm({ onFormSubmit }: EntryFormProps) {
           description,
           careTipps,
           location,
+          benutzerEmail: session?.user?.email,
         };
 
         onFormSubmit(entry);
