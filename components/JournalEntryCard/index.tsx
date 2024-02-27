@@ -25,7 +25,7 @@ export default function EntryCard({
 
   const handleConfirm = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    onDeleteEntry(entry.id);
+    onDeleteEntry(entry._id);
     setShowPopup(false);
   };
 
@@ -36,7 +36,7 @@ export default function EntryCard({
 
   return (
     <StyledEntryCard>
-      <StyledLink href={`/journal/${entry.id}`}>
+      <StyledLink href={`/journal/${entry._id}`}>
         <StyledEntryImage
           src={url}
           width={100}

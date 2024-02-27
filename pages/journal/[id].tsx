@@ -5,20 +5,17 @@ import Link from "next/link";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import BackButton from "../../components/BackButton";
 import Head from "next/head";
-import { Entry } from "../../types/entry";
+import useSWR from "swr";
 
-interface EntryDetailProps {
-  entries: Entry[];
-}
-
-export default function EntryDetail({ entries }: EntryDetailProps) {
+export default function EntryDetail() {
   const router = useRouter();
   const { id } = router.query;
 
-  const entry = entries.find((entry) => entry.id === id);
-  if (!entry) {
-    return <p>Entry not found</p>;
-  }
+  const { data: entry, error: entryError } = useSWR(`/api/entries/${id}`);
+  
+  if (entryError)
+    return <div>Error occurred while fetching data</div>;
+  if (!entry) return <div>Loading...</div>;
 
   return (
     <>
@@ -28,7 +25,7 @@ export default function EntryDetail({ entries }: EntryDetailProps) {
       <ProtectedRoute fallback={"/"}>
       <StyledMain>
       <BackButton />
-      <StyledEditLink href={`/journal/edit/${entry.id}`}>Edit</StyledEditLink>
+      <StyledEditLink href={`/journal/edit/${entry._id}`}>Edit</StyledEditLink>
         <StyledImage
           src={entry.url ||  ""}
           width={375}

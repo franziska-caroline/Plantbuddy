@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Entry } from "../../types/entry";
 
 interface EntryFormProps {
-  onFormSubmit: (id: string) => void;
+  onFormSubmit: (entry: Entry) => void;
   entry: Entry;
 }
 
@@ -24,7 +24,6 @@ export default function EntryForm({ onFormSubmit, entry }: EntryFormProps) {
   const [showWarning, setShowWarning] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [, setImageInputValue] = useState("");
-
 
   const router = useRouter();
 
@@ -76,16 +75,16 @@ export default function EntryForm({ onFormSubmit, entry }: EntryFormProps) {
       description,
       careTipps,
       location,
-      id: entry?.id || "",
+      _id: entry?._id || "",
     };
 
-    if (entry && entry.id) {
-      entryObject.id = entry.id;
+    if (entry && entry._id) {
+      entryObject._id = entry._id;
     }
 
-    const entryId = entryObject.id || "";
+    const updatedEntryObject = entryObject || "";
 
-    onFormSubmit(entryId);
+    onFormSubmit(updatedEntryObject);
     router.push("/journal");
   }
   const handleRemoveImage = () => {
@@ -97,7 +96,7 @@ export default function EntryForm({ onFormSubmit, entry }: EntryFormProps) {
   function handleReset(event: React.FormEvent<HTMLFormElement>) {
     event.currentTarget.reset();
 
-    if (entry && entry.id) {
+    if (entry && entry._id) {
       router.push("/journal");
     }
   }

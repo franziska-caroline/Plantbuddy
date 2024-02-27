@@ -6,21 +6,22 @@ import Head from "next/head";
 import ProtectedRoute from "../../../components/ProtectedRoute";
 import BackButton from "../../../components/BackButton";
 import { StyledTitle } from "../../../components/Title/StyledTitle";
+import useSWR from "swr";
 import { Entry } from "../../../types/entry";
 
+
 interface EditJournalProps {
-  entries: Entry[];
-  onEditEntry: (id: string) => void
+  onEditEntry: (entry: Entry) => void;
 }
 
-export default function EditJournal({ entries, onEditEntry }: EditJournalProps) {
+export default function EditJournal({ onEditEntry }: EditJournalProps) {
   const router = useRouter();
   const { id } = router.query;
-  const thisEntry = entries?.find((entry) => entry.id === id);
+  const { data: thisEntry, error: entryError } = useSWR(`/api/entries/${id}`);
 
-  if (!thisEntry) {
-    return <div>Entry not found</div>;
-  }
+  if (entryError) return <div>Error occurred while fetching data</div>;
+  if (!thisEntry) return <div>Entry not Found</div>;
+
   return (
     <>
       <Head>
